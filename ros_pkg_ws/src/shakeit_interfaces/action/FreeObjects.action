@@ -1,0 +1,10 @@
+# Goal
+---
+# Result
+bool empty
+int32 count
+geometry_msgs/Pose[] poses
+string raw_result
+---
+# Feedback
+string feedback

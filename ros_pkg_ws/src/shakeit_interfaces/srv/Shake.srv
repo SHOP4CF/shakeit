@@ -1,0 +1,6 @@
+float32[3] amplitude
+float32[3] frequency
+float32[3] phase
+float32 time
+---
+bool success

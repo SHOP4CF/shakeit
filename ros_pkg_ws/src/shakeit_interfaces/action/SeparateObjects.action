@@ -1,0 +1,11 @@
+# Goal
+int32 free_objects  # Number of objects that should be free to pick
+# float32 timeout # Timeout in seconds
+int32 max_actions # Maximum number of actions which may be performed
+---
+# Result
+int32 free_objects
+---
+# Feedback
+string feedback
+int32 free_objects

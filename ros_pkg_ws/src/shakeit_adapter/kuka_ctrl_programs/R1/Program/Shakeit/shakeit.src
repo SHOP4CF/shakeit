@@ -1,0 +1,144 @@
+&ACCESS RVO
+&REL 2
+DEF  Shakeit ( )
+   ;FOLD init
+      DECL EKI_STATUS RET
+      E6POS target
+      E6POS above_target
+      E6POS target_offset
+      E6POS out_of_view
+      E6POS drop_off
+      INT target_id_internal
+      BOOL RET_BOOL
+      ;INT ret_val
+      
+      RET_BOOL = FALSE
+      ret_val = 0
+      
+      out_of_view = {X 115, Y 370, Z 400, A -180,B 0 ,C 180}
+      drop_off = {X -85, Y 370, Z 350, A -180,B 0 ,C 180}
+      target_offset = {X 0, Y 0, Z -50, A 0,B 0 ,C 0}
+      above_target = {X 0, Y 0, Z 0, A 0,B 0 ,C 0}
+      
+      target_id_internal = 0
+      target.X = 0.0
+      target.Y = 0.0
+      target.Z = 0.0
+      target.A = 0.0
+      target.B = 0.0
+      target.C = 0.0
+      
+      GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+      INTERRUPT ON 3 
+      BAS (#INITMOV,0 )
+      
+      ; Set TCP 
+      BAS(#TOOL, 4) ; Universal Gripper Fingers
+      BAS(#BASE, 0)
+      
+      ; overall blend radius
+      $APO.CDIS=10
+      
+      IF $MODE_OP == #T1 THEN
+         BAS(#ACC_PTP, 100.0)   ; % of MAX
+         BAS(#ACC_CP,  100.0)   ; % of MAX
+         BAS(#VEL_PTP, 100.0)   ; % of MAX
+         BAS(#VEL_CP, DEF_VEL_CP)    ; m/s
+      ELSE
+         BAS(#ACC_PTP, 100.0)   ; % of MAX
+         BAS(#ACC_CP,  100.0)   ; % of MAX
+         BAS(#VEL_PTP, 25.0)   ; % of MAX
+         BAS(#VEL_CP, 0.4)    ; m/s
+      ENDIF
+      
+      
+      
+   ;ENDFOLD
+     
+
+;FOLD PTP home Vel=100 % PDAT2;%{PE}
+;FOLD Parameters ;%{h}
+;Params IlfProvider=kukaroboter.basistech.inlineforms.movement.old; Kuka.IsGlobalPoint=False; Kuka.PointName=home; Kuka.BlendingEnabled=False; Kuka.MoveDataPtpName=PDAT2; Kuka.VelocityPtp=100; Kuka.CurrentCDSetIndex=0; Kuka.MovementParameterFieldEnabled=True; IlfCommand=PTP
+;ENDFOLD
+$BWDSTART = FALSE
+PDAT_ACT = PPDAT2
+FDAT_ACT = Fhome
+BAS(#PTP_PARAMS, 100.0)
+SET_CD_PARAMS (0)
+PTP Xhome
+;ENDFOLD
+   
+
+   
+   LOOP
+      
+      LIN out_of_view 
+      ;RET_BOOL = SEND_RET_VAL(0, target_id_internal, TRUE); Waiting for new target ... Ready to move
+      WAIT FOR TRUE
+      ret_val = 0
+      
+      
+      WAIT FOR $FLAG[101] ;TODO use global var?
+      $FLAG[101] = FALSE
+      MsgNotify("[ShakeitCtrlChannel] new target")
+      ;FOLD Read new target
+         RET = EKI_GetInt("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@id", target_id)
+         RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@X", target.X)
+         RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@Y", target.Y)
+         RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@Z", target.Z)
+         RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@A", target.A)
+         RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@B", target.B)
+         RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@C", target.C)
+         RET = EKI_ClearBuffer("ShakeitCtrlChannel", "ShakeitRcwCtrl")
+      ;ENDFOLD
+      
+      ;RET_BOOL = SEND_RET_VAL(1, target_id_internal, FALSE); Recieved new target ... on the move
+      ret_val = 1
+      OpenGripper()
+
+      
+      ; Calculate approach and exit
+      above_target = target:target_offset
+      
+      LIN above_target C_DIS
+      LIN target ; Move to target
+      CloseGripper()
+      WAIT SEC 0.25
+      ret_val = 2
+      ;RET_BOOL = SEND_RET_VAL(2, target_id_internal, FALSE) ; Gripped target
+      
+      LIN above_target C_DIS
+      TRIGGER WHEN DISTANCE=1 DELAY=0 DO ret_val=3
+      LIN out_of_view C_DIS
+      
+      TRIGGER WHEN DISTANCE=1 DELAY=-100 DO OpenGripper()PRIO=-1
+      LIN drop_off C_DIS
+      
+      LIN out_of_view
+      
+   ENDLOOP 
+   
+   ;FOLD PTP home
+      SPTP XHOME WITH $VEL_AXIS[1] = SVEL_JOINT(100.0), $TOOL = STOOL2(FHOME), $BASE = SBASE(FHOME.BASE_NO), $IPO_MODE = SIPO_MODE(FHOME.IPO_FRAME), $LOAD = SLOAD(FHOME.TOOL_NO), $ACC_AXIS[1] = SACC_JOINT(PDEFAULT), $APO = SAPO_PTP(PDEFAULT), $GEAR_JERK[1] = SGEAR_JERK(PDEFAULT), $COLLMON_TOL_PRO[1] = USE_CM_PRO_VALUES(0)
+   ;ENDFOLD
+     
+END
+
+GLOBAL DEFFCT BOOL SEND_RET_VAL(ret_valf:IN, target_idf:IN, stop_advance_pointer:IN)
+   INT ret_valf
+   INT target_idf
+   BOOL stop_advance_pointer
+   DECL EKI_STATUS RET
+   
+   if(stop_advance_pointer)THEN
+      WAIT FOR TRUE  ; Stop the advance pointer - that is don't send this before the robot has reached the final point
+   ENDIF
+   
+   target_id = target_idf
+   ret_val = ret_valf
+   
+   ;RET = EKI_SetInt("ShakeitCtrlChannel","RobotStatus/PrgState/@id", target_id)
+   ;RET = EKI_SetInt("ShakeitCtrlChannel","RobotStatus/PrgState/@ret_val", ret_val)
+   ;RET = EKI_Send("ShakeitCtrlChannel","RobotStatus/PrgState") 
+   return TRUE
+ENDFCT

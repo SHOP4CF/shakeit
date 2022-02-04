@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="2">
+	<name>shakeit_kuka_kr6_workcell</name>
+	<version>0.8.4</version>
+	<description>The shakeit_kuka_kr6_workcell package</description>
+	<maintainer email="mmo@dti.dk">mmo</maintainer>
+	<license>TODO</license>
+
+	<buildtool_depend>ament_cmake</buildtool_depend>
+
+	<exec_depend>ament_index_python</exec_depend>
+	<exec_depend>launch</exec_depend>
+	<exec_depend>launch_ros</exec_depend>
+	<exec_depend>robot_state_publisher</exec_depend>
+
+	<test_depend>ament_cmake_cppcheck</test_depend>
+    <test_depend>ament_cmake_flake8</test_depend>
+    <test_depend>ament_cmake_lint_cmake</test_depend>
+
+	<export>
+		<build_type>ament_cmake</build_type>
+	</export>
+</package>

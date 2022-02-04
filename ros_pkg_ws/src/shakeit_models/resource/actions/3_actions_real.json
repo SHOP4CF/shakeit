@@ -1,0 +1,22 @@
+{
+  "actions": [
+    {
+      "name": "FlipAction",
+      "shake_service": "feeder/flip",
+      "repetitions": 1,
+      "speed": 4
+    },
+    {
+      "name": "ForwardAction",
+      "shake_service": "feeder/forward",
+      "repetitions": 1,
+      "speed": 4
+    },
+    {
+      "name": "BackwardAction",
+      "shake_service": "feeder/backward",
+      "repetitions": 1,
+      "speed": 4
+    }
+  ]
+}

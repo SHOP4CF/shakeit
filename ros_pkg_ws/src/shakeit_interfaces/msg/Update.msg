@@ -1,0 +1,5 @@
+shakeit_interfaces/Observation old_state
+shakeit_interfaces/Observation new_state
+float32 reward
+int32 action
+bool done

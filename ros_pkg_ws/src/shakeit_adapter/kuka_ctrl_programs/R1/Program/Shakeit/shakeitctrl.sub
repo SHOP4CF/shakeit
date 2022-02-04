@@ -1,0 +1,110 @@
+&ACCESS RVP
+&COMMENT USER specified PLC program
+DEF  ShakeitCtrl ( )
+   DECL INT ctrlCommState
+   DECL EKI_STATUS ret
+   
+   ctrlCommState = 1
+   $FLAG[101] = FALSE
+   
+   LOOP
+      SWITCH ctrlCommState
+         CASE 1   ; Init connection
+            IF $FLAG[100] THEN
+               ctrlCommState = 3
+            ELSE
+               ret = EKI_Init("ShakeitCtrlChannel")
+               ret = EKI_Open("ShakeitCtrlChannel")
+               target_id = 0
+               ret_val = 0
+               IF ret.Connected THEN
+                  MsgNotify("[ShakeitCtrlChannel] connection init")
+                  ctrlCommState = 2
+               ENDIF
+            ENDIF
+            
+         CASE 2   ; Waiting for connection
+            IF $FLAG[100] THEN
+               MsgNotify("[ShakeitCtrlChannel] connection established")
+               ctrlCommState = 3
+            ENDIF
+            
+         CASE 3   ; Connection active
+            IF $FLAG[100] THEN
+               send_robot_status()
+               
+               IF $FLAG[101] THEN
+                  ;$FLAG[101] = FALSE
+                  ;MsgNotify("[ShakeitCtrlChannel] new target")
+               ENDIF
+            ELSE
+               MsgNotify("[ShakeitCtrlChannel] connection lost")
+               ctrlCommState = 1
+            ENDIF
+            
+         DEFAULT
+      ENDSWITCH
+      
+      ;ensure that the robot can be operated in others mode than EXT
+      IF $MODE_OP <> #EX THEN
+         $OUT[101] = FALSE
+         $OUT[102] = TRUE
+         $OUT[103] = FALSE
+         $OUT[104] = FALSE
+      ENDIF
+   ENDLOOP
+END
+
+DEF send_robot_status()
+   DECL EKI_STATUS ret
+   
+   
+   RET = EKI_SetInt("ShakeitCtrlChannel","RobotStatus/PrgState/@id", target_id)
+   RET = EKI_SetInt("ShakeitCtrlChannel","RobotStatus/PrgState/@ret_val", ret_val)
+   RET = EKI_Send("ShakeitCtrlChannel","RobotStatus/PrgState") 
+   
+   
+   ret = EKI_SetBool("ShakeitCtrlChannel","RobotStatus/RobotState/@alarm_stop", $ALARM_STOP)
+   ret = EKI_SetBool("ShakeitCtrlChannel","RobotStatus/RobotState/@alarm_stop_int", $ALARM_STOP_INTERN)
+   ret = EKI_SetBool("ShakeitCtrlChannel","RobotStatus/RobotState/@ctrl_rdy", $RC_RDY1)
+   ret = EKI_SetBool("ShakeitCtrlChannel","RobotStatus/RobotState/@drv_rdy", $PERI_RDY)
+   ret = EKI_SetInt("ShakeitCtrlChannel","RobotStatus/RobotState/@ov_pro", $OV_PRO)
+   SWITCH $MODE_OP
+      CASE #T1
+         ret = EKI_SetInt("ShakeitCtrlChannel","RobotStatus/RobotState/@op_mode", 1)
+      CASE #T2
+         ret = EKI_SetInt("ShakeitCtrlChannel","RobotStatus/RobotState/@op_mode", 2)
+      CASE #AUT
+         ret = EKI_SetInt("ShakeitCtrlChannel","RobotStatus/RobotState/@op_mode", 3)
+      CASE #EX
+         ret = EKI_SetInt("ShakeitCtrlChannel","RobotStatus/RobotState/@op_mode", 4)
+      DEFAULT
+         ret = EKI_SetInt("ShakeitCtrlChannel","RobotStatus/RobotState/@op_mode", -1)
+   ENDSWITCH
+   ret = EKI_Send("ShakeitCtrlChannel","RobotStatus/RobotState")
+   
+   ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/JointState/@A1", $AXIS_ACT_MEAS.A1)
+   ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/JointState/@A2", $AXIS_ACT_MEAS.A2)
+   ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/JointState/@A3", $AXIS_ACT_MEAS.A3)
+   ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/JointState/@A4", $AXIS_ACT_MEAS.A4)
+   ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/JointState/@A5", $AXIS_ACT_MEAS.A5)
+   ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/JointState/@A6", $AXIS_ACT_MEAS.A6)
+   ret = EKI_Send("ShakeitCtrlChannel","RobotStatus/JointState")
+   
+   IF ($ACT_TOOL_C >= 1) AND ($ACT_TOOL_C <= 16) THEN
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tcp_X", $POS_ACT_MES.X)
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tcp_Y", $POS_ACT_MES.Y)
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tcp_Z", $POS_ACT_MES.Z)
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tcp_A", $POS_ACT_MES.A)
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tcp_B", $POS_ACT_MES.B)
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tcp_C", $POS_ACT_MES.C)
+      
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tool_X", $TOOL_C.X)
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tool_Y", $TOOL_C.Y)
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tool_Z", $TOOL_C.Z)
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tool_A", $TOOL_C.A)
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tool_B", $TOOL_C.B)
+      ret = EKI_SetReal("ShakeitCtrlChannel","RobotStatus/FlangePose/@tool_C", $TOOL_C.C)
+      ret = EKI_Send("ShakeitCtrlChannel","RobotStatus/FlangePose")             
+   ENDIF
+END

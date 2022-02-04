@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="robot" >
+
+	<link name="world"/>
+	
+	<link name="cell_bottom_link"/>
+
+	<joint name="world_to_cell_bottom" type="fixed">
+		<parent link="world"/>
+		<child link="cell_bottom_link"/>
+		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+	</joint>
+	
+	<link name="cell_base_link">
+		<visual>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<geometry>
+			<mesh filename="package://shakeit_kuka_kr6_workcell/meshes/celle_visual.stl" scale="0.001 0.001 0.001"/>
+		</geometry>
+		<material name="lightgrey">
+			<color rgba="0.6 0.6 0.6 1"/>
+		</material>
+		</visual>
+		<!-- bottom plate -->
+		<collision>
+		<origin xyz="0 0 -0.01" rpy="0 0 0"/>
+		<geometry>
+			<box size="1.420 1.080 0.02"/>
+		</geometry>
+		</collision>
+		<!-- top plate -->
+		<collision>
+		<origin xyz="0 0 1.161" rpy="0 0 0"/>
+		<geometry>
+			<box size="1.420 1.080 0.02"/>
+		</geometry>
+		</collision>
+	</link>
+
+	<joint name="cell_bottom_to_base_link" type="fixed">
+		<parent link="cell_bottom_link"/>
+		<child link="cell_base_link"/>
+		<origin xyz="0.0 0.0 0.690" rpy="0.0 0.0 0.0"/>
+	</joint>
+
+	<link name="robot_mount_link"/>
+
+	<joint name="cell_base_link_to_robot_mount" type="fixed">
+		<parent link="cell_base_link"/>
+		<child link="robot_mount_link"/>
+		<origin xyz="-0.362 0.0 0.0" rpy="0.0 0.0 0.0"/>
+	</joint>
+
+	<link name="table_center">
+		<visual>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<geometry>
+			<mesh filename="package://shakeit_kuka_kr6_workcell/meshes/siegmund_1500x1000.stl" scale="0.001 0.001 0.001"/>
+		</geometry>
+		<material name="darkgrey">
+			<color rgba="0.2 0.2 0.2 1"/>
+		</material>
+		</visual>
+		<collision>
+		<origin xyz="0 0 -0.025" rpy="0 0 0" />
+		<geometry>
+			<box size="1.5 1.0 0.05"/>
+		</geometry>
+		</collision>
+	</link>
+
+	<joint name="cell_to_table" type="fixed">
+		<parent link="cell_base_link"/>
+		<child link="table_center"/>
+		<origin xyz="0.0 -0.020 0.05" rpy="0.0 0.0 0.0"/>
+	</joint>
+
+	<link name="table_corner"/>
+
+	<joint name="center_to_corner" type="fixed">
+		<parent link="table_center"/>
+		<child link="table_corner"/>
+		<origin xyz="-0.750 -0.500 0.0" rpy="0.0 0.0 0.0"/>
+	</joint>
+
+	<xacro:include ns="kr6" filename="$(find shakeit_kuka_kr6_workcell)/urdf/kuka_kr6_with_adapter.urdf.xacro" />
+	<xacro:kr6.kuka_kr6_r900-2_with_adapter prefix="kr6_r900___" />
+	<joint name="robot_to_table" type="fixed">
+		<parent link="table_center"/>
+		<child link="kr6_r900___base_link"/>
+		<origin xyz="-0.050 0.0 0.0" rpy="0.0 0.0 ${pi/2.0}"/>
+	</joint>
+
+	<link name="TCP" />
+	<joint name="flange_to_TCP" type="fixed">
+		<parent link="kr6_r900___flange_link"/>
+		<child link="TCP"/>
+		<origin xyz="0.0 0.0 0.202" rpy="0.0 0.0 0.0"/>
+	</joint>
+	
+</robot>

@@ -1,0 +1,24 @@
+- git:
+    local-name: anyfeeder_interfaces
+    uri: http://robotgit.localdom.net/ai-box/components/anyfeeder/anyfeeder_interfaces.git
+    version: master
+
+- git:
+    local-name: anyfeeder_connector
+    uri: http://robotgit.localdom.net/ai-box/components/anyfeeder/anyfeeder_connector.git
+    version: master
+
+- git:
+    local-name: sensopart_interfaces
+    uri: http://robotgit.localdom.net/ai-box/components/sensopart/sensopart_interfaces.git
+    version: master
+
+- git:
+    local-name: sensopart_connector
+    uri: http://robotgit.localdom.net/ai-box/components/sensopart/sensopart_connector.git
+    version: master
+
+- git:
+    local-name: sim_ros2_interface
+    uri: https://github.com/CoppeliaRobotics/simExtROS2Interface.git
+    version: coppeliasim-v4.1.0

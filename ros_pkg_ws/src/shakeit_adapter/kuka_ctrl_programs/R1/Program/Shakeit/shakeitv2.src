@@ -1,0 +1,203 @@
+&ACCESS RVO
+&REL 14
+&PARAM DISKPATH = KRC:\R1\Program\Shakeit
+DEF  shakeitv2 ( )
+   ;FOLD init
+      DECL EKI_STATUS RET
+      E6POS target
+      E6POS above_target
+      E6POS target_offset
+      E6POS out_of_view
+      E6POS drop_off
+      INT target_id_internal
+      INT STATE_VAR
+      DECL INT hCont
+      DECL INT nRet
+      
+      ret_val = 0
+      STATE_VAR = 0
+      out_of_view = {X 115, Y 370, Z 400, A -180,B 0 ,C 180}
+      drop_off = {X -85, Y 370, Z 350, A -180,B 0 ,C 180}
+      target_offset = {X 0, Y 0, Z -50, A 0,B 0 ,C 0}
+      above_target = {X 0, Y 0, Z 0, A 0,B 0 ,C 0}
+      
+      target_id_internal = 0
+      target.X = 0.0
+      target.Y = 0.0
+      target.Z = 0.0
+      target.A = 0.0
+      target.B = 0.0
+      target.C = 0.0
+      
+      GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+      INTERRUPT ON 3 
+      BAS (#INITMOV,0 )
+      
+      ; Set TCP 
+      BAS(#TOOL, 4) ; Universal Gripper Fingers
+      BAS(#BASE, 0)
+      
+      ; overall blend radius
+      $APO.CDIS=20
+      
+      IF $MODE_OP == #T1 THEN
+         BAS(#ACC_PTP, 100.0)   ; % of MAX
+         BAS(#ACC_CP,  100.0)   ; % of MAX
+         BAS(#VEL_PTP, 100.0)   ; % of MAX
+         BAS(#VEL_CP, DEF_VEL_CP)    ; m/s
+      ELSE
+         BAS(#ACC_PTP, 100.0)   ; % of MAX
+         BAS(#ACC_CP,  100.0)   ; % of MAX
+         BAS(#VEL_PTP, 20.0)   ; % of MAX
+         BAS(#VEL_CP, 0.4)    ; m/s
+      ENDIF
+      
+   ;ENDFOLD
+   
+   ;FOLD PTP home Vel=100 % PDAT2;%{PE}
+      ;FOLD Parameters ;%{h}
+         ;Params IlfProvider=kukaroboter.basistech.inlineforms.movement.old; Kuka.IsGlobalPoint=False; Kuka.PointName=home; Kuka.BlendingEnabled=False; Kuka.MoveDataPtpName=PDAT2; Kuka.VelocityPtp=100; Kuka.CurrentCDSetIndex=0; Kuka.MovementParameterFieldEnabled=True; IlfCommand=PTP
+      ;ENDFOLD
+      $BWDSTART = FALSE
+      PDAT_ACT = PPDAT2
+      FDAT_ACT = Fhome
+      BAS(#PTP_PARAMS, 100.0)
+      SET_CD_PARAMS (0)
+      PTP Xhome
+   ;ENDFOLD
+         ; overall blend radius
+      $APO.CDIS=20
+      
+   ;FOLD StateMachine
+      LOOP
+         
+         SWITCH STATE_VAR
+            
+            CASE 0
+               ;FOLD WAITING FOR TARGET
+                  TRIGGER WHEN DISTANCE=1 DELAY=0 DO ret_val=STATE_VAR
+                  PTP out_of_view 
+                  WAIT FOR $FLAG[101]
+                  $FLAG[101] = FALSE
+                  STATE_VAR = 1
+               ;ENDFOLD
+               
+            CASE 1
+               ;FOLD Get target
+                  wait for true
+                  ret_val = STATE_VAR
+                  WAIT SEC 0.20
+                  MsgNotify("[ShakeitPRG] new target recieved")
+                  RET = EKI_GetInt("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@id", target_id)
+                  RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@X", target.X)
+                  RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@Y", target.Y)
+                  RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@Z", target.Z)
+                  RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@A", target.A)
+                  RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@B", target.B)
+                  RET = EKI_GetReal("ShakeitCtrlChannel", "ShakeitRcwCtrl/NewTarget/@C", target.C)
+                  RET = EKI_ClearBuffer("ShakeitCtrlChannel", "ShakeitRcwCtrl")
+                  STATE_VAR = 2
+               ;ENDFOLD
+               
+            CASE 2
+               ;FOLD MOVE ABOVE TARGET
+                  OpenGripper()
+                  TRIGGER WHEN DISTANCE=1 DELAY=0 DO ret_val=STATE_VAR                  
+                  above_target = target:target_offset  ; Calculate approach and exit
+                  PTP above_target C_PTP C_DIS
+                  STATE_VAR = 3
+               ;ENDFOLD
+               
+            CASE 3                 
+
+                  nRet = 0
+                  hCont = 0
+                  $OUT[400] = FALSE
+                  INTERRUPT DECL 11 WHEN $OUT[400] DO STOPROBOT()
+                  START_MONITOR_FORCE(nRet, hCont)
+                  TRIGGER WHEN DISTANCE=1 DELAY=0 DO ret_val=STATE_VAR
+                  ;LIN target ; Move to target
+                  
+                  MOVE_TO_TARGET(target)
+                  $ADVANCE=3 ; RESET ADVANCE RUN
+                  
+                  STOP_MONITOR_FORCE(nRet, hCont)
+                  
+                  IF $OUT[400] THEN
+                     STATE_VAR = 6
+                  ELSE
+                     STATE_VAR = 4
+                  ENDIF
+
+            CASE 4
+               ;FOLD GRIP PIECE AND MOVE OUT OFF VIEW
+                  CloseGripper()
+                  WAIT SEC 0.25
+                  LIN above_target C_DIS
+                  TRIGGER WHEN DISTANCE=1 DELAY=0 DO ret_val=STATE_VAR
+                  PTP out_of_view C_PTP
+                  STATE_VAR = 5
+               ;ENDFOLD
+               
+            CASE 5
+               ;FOLD MOVE TO DROP AND RELEASE
+                  TRIGGER WHEN DISTANCE=1 DELAY=0 DO ret_val=STATE_VAR
+                  TRIGGER WHEN DISTANCE=1 DELAY=-100 DO OpenGripper() PRIO=-1
+                  PTP drop_off C_PTP
+                  STATE_VAR = 0
+               ;ENDFOLD
+               
+            CASE 6
+               ;FOLD ERROR_STATE
+                  MsgNotify("[ShakeitPRG] ERROR STATE something went wrong in picking")
+                  OpenGripper()                 
+                  LIN above_target C_DIS
+                  TRIGGER WHEN DISTANCE=1 DELAY=0 DO ret_val=STATE_VAR
+                  PTP out_of_view 
+                  WAIT FOR TRUE
+                  ret_val = STATE_VAR
+                  WAIT SEC 1.0
+                  STATE_VAR = 0
+               ;ENDFOLD
+               
+            DEFAULT
+               MsgNotify("[ShakeitPRG] ERROR wrong state")
+         ENDSWITCH      
+   ;ENDFOLD  
+      ENDLOOP 
+     
+      
+END
+
+
+DEF START_MONITOR_FORCE(nRet:OUT, hCont:OUT)
+   INT nRet, hCont
+   INTERRUPT ON 11
+   nRet=RSI_CREATE("FTCtrl/FTCtrl_force_monitor",hCont)
+   nRet=RSI_SETPUBLICPAR(hCont,"Set_Fz","Value", 5.0)
+   nRet=RSI_ON(#RELATIVE)
+END
+
+DEF STOP_MONITOR_FORCE(nRet:OUT, hCont:OUT)
+   INT nRet, hCont
+   INTERRUPT OFF 11
+   nRet=RSI_OFF()
+   nRet=RSI_DELETE(hCont)
+END
+
+DEF STOPROBOT()
+   INTERRUPT OFF 12
+   BRAKE
+   MsgNotify("FORCE too high!! Robot motion aborted.");
+   RESUME
+END
+
+
+DEF MOVE_TO_TARGET (TARGET:IN) ;Subprogram for search path motion
+E6POS TARGET
+BAS(#VEL_CP, 0.1)    ; m/s
+LIN TARGET
+BAS(#VEL_CP, 0.4)    ; m/s
+$ADVANCE=0 ;Stop advance run
+END ;
+;---------

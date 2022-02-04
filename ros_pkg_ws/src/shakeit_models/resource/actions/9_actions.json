@@ -1,0 +1,58 @@
+{
+  "actions": [
+    {
+      "name": "FlipS4",
+      "shake_service": "feeder/flip",
+      "repetitions": 4,
+      "speed": 4
+    },
+    {
+      "name": "FlipS8",
+      "shake_service": "feeder/flip",
+      "repetitions": 4,
+      "speed": 8
+    },
+    {
+      "name": "FlipS10",
+      "shake_service": "feeder/flip",
+      "repetitions": 4,
+      "speed": 10
+    },
+    {
+      "name": "ForwardS4",
+      "shake_service": "feeder/forward",
+      "repetitions": 4,
+      "speed": 4
+    },
+    {
+      "name": "ForwardS8",
+      "shake_service": "feeder/forward",
+      "repetitions": 4,
+      "speed": 8
+    },
+    {
+      "name": "ForwardS10",
+      "shake_service": "feeder/forward",
+      "repetitions": 4,
+      "speed": 10
+    },
+    {
+      "name": "BackwardS4",
+      "shake_service": "feeder/backward",
+      "repetitions": 4,
+      "speed": 4
+    },
+    {
+      "name": "BackwardS8",
+      "shake_service": "feeder/backward",
+      "repetitions": 4,
+      "speed": 8
+    },
+    {
+      "name": "BackwardS10",
+      "shake_service": "feeder/backward",
+      "repetitions": 4,
+      "speed": 10
+    }
+  ]
+}

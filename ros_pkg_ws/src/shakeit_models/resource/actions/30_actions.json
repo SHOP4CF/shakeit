@@ -1,0 +1,193 @@
+{
+  "actions": [
+    {
+      "name": "fp_r1s2",
+      "shake_service": "feeder/flip",
+      "repetitions": 1,
+      "speed": 2
+    },
+    {
+      "name": "fw_r1s2",
+      "shake_service": "feeder/forward",
+      "repetitions": 1,
+      "speed": 2
+    },
+    {
+      "name": "B_r1s2",
+      "shake_service": "feeder/backward",
+      "repetitions": 1,
+      "speed": 2
+    },
+
+    {
+      "name": "fp_r3s2",
+      "shake_service": "feeder/flip",
+      "repetitions": 3,
+      "speed": 2
+    },
+    {
+      "name": "fw_r3s2",
+      "shake_service": "feeder/forward",
+      "repetitions": 3,
+      "speed": 2
+    },
+    {
+      "name": "B_r3s2",
+      "shake_service": "feeder/backward",
+      "repetitions": 3,
+      "speed": 2
+    },
+
+    {
+      "name": "fp_r1s4",
+      "shake_service": "feeder/flip",
+      "repetitions": 1,
+      "speed": 4
+    },
+    {
+      "name": "fw_r1s4",
+      "shake_service": "feeder/forward",
+      "repetitions": 1,
+      "speed": 4
+    },
+    {
+      "name": "B_r1s4",
+      "shake_service": "feeder/backward",
+      "repetitions": 1,
+      "speed": 4
+    },
+
+    {
+      "name": "fp_r3s4",
+      "shake_service": "feeder/flip",
+      "repetitions": 3,
+      "speed": 4
+    },
+    {
+      "name": "fw_r3s4",
+      "shake_service": "feeder/forward",
+      "repetitions": 3,
+      "speed": 4
+    },
+    {
+      "name": "B_r3s4",
+      "shake_service": "feeder/backward",
+      "repetitions": 3,
+      "speed": 4
+    },
+
+    {
+      "name": "fp_r1s6",
+      "shake_service": "feeder/flip",
+      "repetitions": 1,
+      "speed": 6
+    },
+    {
+      "name": "fw_r1s6",
+      "shake_service": "feeder/forward",
+      "repetitions": 1,
+      "speed": 6
+    },
+    {
+      "name": "B_r1s6",
+      "shake_service": "feeder/backward",
+      "repetitions": 1,
+      "speed": 6
+    },
+
+    {
+      "name": "fp_r3s6",
+      "shake_service": "feeder/flip",
+      "repetitions": 3,
+      "speed": 6
+    },
+    {
+      "name": "fw_r3s6",
+      "shake_service": "feeder/forward",
+      "repetitions": 3,
+      "speed": 6
+    },
+    {
+      "name": "B_r3s6",
+      "shake_service": "feeder/backward",
+      "repetitions": 3,
+      "speed": 6
+    },
+
+    {
+      "name": "fp_r1s8",
+      "shake_service": "feeder/flip",
+      "repetitions": 1,
+      "speed": 8
+    },
+    {
+      "name": "fw_r1s8",
+      "shake_service": "feeder/forward",
+      "repetitions": 1,
+      "speed": 8
+    },
+    {
+      "name": "B_r1s8",
+      "shake_service": "feeder/backward",
+      "repetitions": 1,
+      "speed": 8
+    },
+
+    {
+      "name": "fp_r3s8",
+      "shake_service": "feeder/flip",
+      "repetitions": 3,
+      "speed": 8
+    },
+    {
+      "name": "fw_r3s8",
+      "shake_service": "feeder/forward",
+      "repetitions": 3,
+      "speed": 8
+    },
+    {
+      "name": "B_r3s8",
+      "shake_service": "feeder/backward",
+      "repetitions": 3,
+      "speed": 8
+    },
+
+    {
+      "name": "fp_r1s10",
+      "shake_service": "feeder/flip",
+      "repetitions": 1,
+      "speed": 10
+    },
+    {
+      "name": "fw_r1s10",
+      "shake_service": "feeder/forward",
+      "repetitions": 1,
+      "speed": 10
+    },
+    {
+      "name": "B_r1s10",
+      "shake_service": "feeder/backward",
+      "repetitions": 1,
+      "speed": 10
+    },
+
+    {
+      "name": "fp_r3s10",
+      "shake_service": "feeder/flip",
+      "repetitions": 3,
+      "speed": 10
+    },
+    {
+      "name": "fw_r3s10",
+      "shake_service": "feeder/forward",
+      "repetitions": 3,
+      "speed": 10
+    },
+    {
+      "name": "B_r3s10",
+      "shake_service": "feeder/backward",
+      "repetitions": 3,
+      "speed": 10
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+<ETHERNETKRL>
+	<CONFIGURATION>
+		<EXTERNAL>
+			<TYPE>Client</TYPE>
+		</EXTERNAL>
+		<INTERNAL>
+			<IP>172.31.1.147</IP>
+			<PORT>54600</PORT>
+			<ALIVE Set_Flag="100"/>
+			<ENVIRONMENT>Submit</ENVIRONMENT>
+			<MESSAGES Display="disabled" Logging="disabled" />
+		</INTERNAL>
+	</CONFIGURATION>
+	<RECEIVE>
+		<XML>
+			<ELEMENT Tag="ShakeitRcwCtrl/NewTarget/@id" Type="INT" />
+			<ELEMENT Tag="ShakeitRcwCtrl/NewTarget/@X" Type="REAL" />
+			<ELEMENT Tag="ShakeitRcwCtrl/NewTarget/@Y" Type="REAL" />
+			<ELEMENT Tag="ShakeitRcwCtrl/NewTarget/@Z" Type="REAL" />
+			<ELEMENT Tag="ShakeitRcwCtrl/NewTarget/@A" Type="REAL" />
+			<ELEMENT Tag="ShakeitRcwCtrl/NewTarget/@B" Type="REAL" />
+			<ELEMENT Tag="ShakeitRcwCtrl/NewTarget/@C" Type="REAL" />
+			<ELEMENT Tag="ShakeitRcwCtrl/NewTarget" Set_Flag="101"/>
+		</XML>
+	</RECEIVE>
+	<SEND>
+		<XML>
+			<ELEMENT Tag="RobotStatus/PrgState/@id"/>
+			<ELEMENT Tag="RobotStatus/PrgState/@ret_val"/>
+			
+			<ELEMENT Tag="RobotStatus/RobotState/@alarm_stop"/>
+			<ELEMENT Tag="RobotStatus/RobotState/@alarm_stop_int"/>
+			<ELEMENT Tag="RobotStatus/RobotState/@op_mode"/>
+			<ELEMENT Tag="RobotStatus/RobotState/@ctrl_rdy"/>
+			<ELEMENT Tag="RobotStatus/RobotState/@drv_rdy"/>
+			<ELEMENT Tag="RobotStatus/RobotState/@ov_pro"/>
+			
+			<ELEMENT Tag="RobotStatus/JointState/@A1"/>
+			<ELEMENT Tag="RobotStatus/JointState/@A2"/>
+			<ELEMENT Tag="RobotStatus/JointState/@A3"/>
+			<ELEMENT Tag="RobotStatus/JointState/@A4"/>
+			<ELEMENT Tag="RobotStatus/JointState/@A5"/>
+			<ELEMENT Tag="RobotStatus/JointState/@A6"/>
+			
+			<ELEMENT Tag="RobotStatus/FlangePose/@tcp_X"/>
+			<ELEMENT Tag="RobotStatus/FlangePose/@tcp_Y"/>
+			<ELEMENT Tag="RobotStatus/FlangePose/@tcp_Z"/>
+			<ELEMENT Tag="RobotStatus/FlangePose/@tcp_A"/>
+			<ELEMENT Tag="RobotStatus/FlangePose/@tcp_B"/>
+			<ELEMENT Tag="RobotStatus/FlangePose/@tcp_C"/>
+			
+			<ELEMENT Tag="RobotStatus/FlangePose/@tool_X"/>
+			<ELEMENT Tag="RobotStatus/FlangePose/@tool_Y"/>
+			<ELEMENT Tag="RobotStatus/FlangePose/@tool_Z"/>
+			<ELEMENT Tag="RobotStatus/FlangePose/@tool_A"/>
+			<ELEMENT Tag="RobotStatus/FlangePose/@tool_B"/>
+			<ELEMENT Tag="RobotStatus/FlangePose/@tool_C"/>
+		</XML>
+	</SEND>
+</ETHERNETKRL>

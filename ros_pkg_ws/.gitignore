@@ -1,0 +1,11 @@
+build/
+install/
+log/
+src/*/.eggs/
+src/.rosinstall
+src/anyfeeder_connector
+src/anyfeeder_interfaces
+src/sim_ros2_interface
+**/__pycache__/
+setup.bash
+test.sh

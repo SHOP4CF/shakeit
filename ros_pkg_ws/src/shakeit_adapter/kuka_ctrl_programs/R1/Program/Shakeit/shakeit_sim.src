@@ -1,0 +1,43 @@
+﻿DEF  shakeit_sim ( )
+; ************************************************************************************************
+; *
+; *   DO NOT UPLOAD THIS FILE TO A REAL ROBOT !!!
+; *   - only for simulation use on a virtual controller.
+; *
+; ************************************************************************************************
+   
+END
+
+GLOBAL DEF OpenGripper()
+END
+
+GLOBAL DEF CloseGripper()
+END
+
+GLOBAL DEFFCT INT RSI_ON(mode:IN)
+   DECL INTEGRATION_MODE mode
+   RETURN 0
+ENDFCT
+
+GLOBAL DEFFCT INT RSI_OFF()
+   RETURN 0
+ENDFCT
+
+GLOBAL DEFFCT INT RSI_DELETE(hCont:IN)
+   INT hCont
+   RETURN 0
+ENDFCT
+
+GLOBAL DEFFCT INT RSI_CREATE(file:IN, hCont:IN)
+   DECL CHAR file[]
+   INT hCont
+   RETURN 0
+ENDFCT
+
+GLOBAL DEFFCT INT RSI_SETPUBLICPAR(hCont:IN, object:IN, parameter:IN, value:IN)
+   INT hCont
+   DECL char object[]
+   DECL char parameter[]
+   REAL value
+   RETURN 0
+ENDFCT

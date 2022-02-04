@@ -1,0 +1,15 @@
+# How to use:
+# Step 1: Insert the right paths
+# Step 2: Remove "_example" from "setup.bash_example"
+# Step 3: $ source setup.bash
+# Step 4: profit
+
+# ROS2
+# source /opt/ros/eloquent/setup.bash  !! Remove # if you don't have this in your ~/.bashrc.
+source install/setup.bash
+
+# COPPELIASIM
+export COPPELIASIM_ROOT=~/tools/CoppeliaSim_Pro_V4_0_0_Ubuntu18_04
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$COPPELIASIM_ROOT
+export QT_QPA_PLATFORM_PLUGIN_PATH=$COPPELIASIM_ROOT
+export COPPELIASIM_ROOT_DIR=~/tools/CoppeliaSim_Pro_V4_0_0_Ubuntu18_04
