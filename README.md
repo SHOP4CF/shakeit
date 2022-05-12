@@ -20,7 +20,6 @@ $shakeip = Get-NetIPAddress -InterfaceAlias "vEthernet (WSL)" | select -exp "IPA
 ## Requirements/dependencies
 * ROS2
 * [CoppeliaSim, plugin for ROS2 and PyRep](ros_pkg_ws/src/shakeit_sim/README.md)
-* [AnyFeeder Connector](http://robotgit.localdom.net/ai-box/components/anyfeeder/anyfeeder_connector)
 
 ### Configure ROS
 In ~/.bashrc define environment variables for your ROS2 installation, e.g:
