@@ -1,5 +1,22 @@
 # Shakeit!
 ![shakeit_overview](docs/shakeit.png)
+
+## Docker
+
+### Build
+
+```powershell
+docker build -t shakeit .
+```
+
+### run
+
+To run not headless on windows, make sure to have an XServer running see [example](https://github.com/SHOP4CF/moni2#windows-wsl-2). Run this one line
+
+```powershell
+$shakeip = Get-NetIPAddress -InterfaceAlias "vEthernet (WSL)" | select -exp "IPAddress"; docker run -it --rm --name shakeit -e DISPLAY=${shakeip}:0.0 shakeit ros2 launch shakeit_experiments run_sim_experiment.launch.py
+```
+
 ## Requirements/dependencies
 * ROS2
 * [CoppeliaSim, plugin for ROS2 and PyRep](ros_pkg_ws/src/shakeit_sim/README.md)
@@ -27,7 +44,7 @@ $ sudo apt-get install python3-rosdep2
 $ rosdep update
 $ wstool init src/ src/src_dependencies.rosinstall --shallow
 $ rosdep install --default-yes --ignore-packages-from-source --from-path ./src
-```
+``` 
 
 NOTE: If the rosdep update gives errors change the following export in the bashrc file (Solution found here [rosdep error](https://github.com/ros-infrastructure/rosdep/issues/576))
 
@@ -79,7 +96,7 @@ $ pycharm
 * [shakeit_interfaces](ros_pkg_ws/src/shakeit_interfaces/README.md): common messages, services, and actions for the shakeit-project
 * [shakeit_models](ros_pkg_ws/src/shakeit_models/README.md): models used for training and prediction
 * [shakeit_sim](ros_pkg_ws/src/shakeit_sim/README.md): simulation of the vibration feeder
-*
+* 
 
 ## Notes
 ```
@@ -93,3 +110,13 @@ Commands:
 init: x=16<cr>
 ```
 Link to sensopart camera pc-software [here](https://www.sensopart.com/en/service/downloads/90-visor-pc-software/)
+
+Pc: dti1234
+
+Kuka: kuka
+
+Shutdown kuka robot: https://www.facebook.com/watch/?v=1286457385034526
+
+source /Workspace/shakeit/ros_pkg_ws/install/setup.bash
+
+

@@ -40,7 +40,7 @@ sudo apt install build-essential liblua5.3-0 qtcreator qt5-default
 3. In the installation directory, open file system/usrset.txt and adjust the values of floatingLicenseEnabled and floatingLicenseServer to
 ```
 floatingLicenseEnabled = true
-floatingLicenseServer = "YOUR LICENS SERVER"
+floatingLicenseServer = 10.248.8.6
 ```
 4. Clone [PyRep](https://github.com/stepjam/PyRep)
 ```

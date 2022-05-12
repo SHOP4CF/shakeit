@@ -7,7 +7,7 @@ import time
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten
 from keras.losses import CategoricalCrossentropy
-from keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam
 
 from shakeit_models.agents.agent import Agent
 

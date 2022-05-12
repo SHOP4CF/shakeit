@@ -13,7 +13,7 @@ from anyfeeder_interfaces.srv import StandardInput
 # CoppeliaSim
 from pyrep import PyRep
 from pyrep.backend import sim
-from pyrep.backend.utils import suppress_std_out_and_err
+#from pyrep.backend.utils import suppress_std_out_and_err
 from pyrep.objects.dummy import Dummy
 from pyrep.objects.joint import Joint
 from pyrep.objects.shape import Shape
@@ -40,11 +40,11 @@ class CoppeliaProxyNode(Node):
         self.extra_stepping = self.declare_parameter('extra_stepping', 150).value
 
         # CoppeliaSim
-        with suppress_std_out_and_err():
-            self.simulator = PyRep()
-            self.simulator.launch(scene_file=scene.value, headless=headless.value)
-            self.simulator.start()
-            self.step_n_times(n=1)
+        #with suppress_std_out_and_err():
+        self.simulator = PyRep()
+        self.simulator.launch(scene_file=scene.value, headless=headless.value)
+        self.simulator.start()
+        self.step_n_times(n=1)
 
         # spawn
         OBJECT_BOUNDING_BOX = 0.035
