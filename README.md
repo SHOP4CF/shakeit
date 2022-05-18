@@ -17,6 +17,12 @@ To run not headless on windows, make sure to have an XServer running see [exampl
 $shakeip = Get-NetIPAddress -InterfaceAlias "vEthernet (WSL)" | select -exp "IPAddress"; docker run -it --rm --name shakeit -e DISPLAY=${shakeip}:0.0 shakeit ros2 launch shakeit_experiments run_sim_experiment.launch.py
 ```
 
+Run with dokcer-compose together with moni2, remember to set DISPLAY_IP in .env and to run the command in the same folder as docker-compose.yml
+```powershell
+docker-compose up
+```
+
+
 ## Requirements/dependencies
 * ROS2
 * [CoppeliaSim, plugin for ROS2 and PyRep](ros_pkg_ws/src/shakeit_sim/README.md)
