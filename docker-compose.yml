@@ -1,0 +1,13 @@
+version: '2'
+services:
+  shakeitShop4cf:
+    image: docker.ramp.eu/shop4cf/shakeit:1.0.0
+    container_name: shakeitShop4cf
+    environment: 
+      - "DISPLAY=YOUR_IP_ON_WSL_NETWORK:0.0"
+  moni2Shop4cf:
+    image: docker.ramp.eu/shop4cf/moni2:1.0.0
+    container_name: moni2Shop4cf
+    environment: 
+      - "DISPLAY=YOUR_IP_ON_WSL_NETWORK:0.0"
+    user: qtuser
