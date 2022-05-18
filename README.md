@@ -20,7 +20,6 @@ $shakeip = Get-NetIPAddress -InterfaceAlias "vEthernet (WSL)" | select -exp "IPA
 ## Requirements/dependencies
 * ROS2
 * [CoppeliaSim, plugin for ROS2 and PyRep](ros_pkg_ws/src/shakeit_sim/README.md)
-* [AnyFeeder Connector](http://robotgit.localdom.net/ai-box/components/anyfeeder/anyfeeder_connector)
 
 ### Configure ROS
 In ~/.bashrc define environment variables for your ROS2 installation, e.g:
@@ -99,24 +98,6 @@ $ pycharm
 * 
 
 ## Notes
-```
-Camera IP: 172.31.1.198:2006
-Commands:
-trigger: "TRX00"
-
-
-Anyfeeder IP: 172.31.1.199:4001
-Commands:
-init: x=16<cr>
-```
 Link to sensopart camera pc-software [here](https://www.sensopart.com/en/service/downloads/90-visor-pc-software/)
-
-Pc: dti1234
-
-Kuka: kuka
-
-Shutdown kuka robot: https://www.facebook.com/watch/?v=1286457385034526
-
-source /Workspace/shakeit/ros_pkg_ws/install/setup.bash
 
 
