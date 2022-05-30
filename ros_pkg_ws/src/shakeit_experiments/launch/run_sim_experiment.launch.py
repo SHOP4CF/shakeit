@@ -7,6 +7,7 @@ from launch import LaunchDescription
 from ament_index_python.packages import get_package_share_directory
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import IncludeLaunchDescription
+from launch_ros.actions import Node
 
 
 def external_py_launch(package_name: str,
@@ -21,7 +22,7 @@ def external_py_launch(package_name: str,
 
 def generate_launch_description():
     # configured by user
-    shakeit_src = '/ros_pkg_ws/src/'  # <<< must be filled in
+    shakeit_src = '/home/miol/Documents/shakeit/ros_pkg_ws/src/'  # <<< must be filled in
     agent_launch = {1: 'dqn_training',
                     2: 'd3qn_training',
                     3: 'a2c_training',
