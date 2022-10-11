@@ -22,7 +22,7 @@ def external_py_launch(package_name: str,
 
 def generate_launch_description():
     # configured by user
-    shakeit_src = '/home/miol/Documents/shakeit/ros_pkg_ws/src/'  # <<< must be filled in
+    shakeit_src = '/ros_pkg_ws/src/'  # <<< must be filled in
     agent_launch = {1: 'dqn_training',
                     2: 'd3qn_training',
                     3: 'a2c_training',
