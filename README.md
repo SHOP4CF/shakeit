@@ -2,17 +2,17 @@
 ![shakeit_overview](docs/shakeit.png)
 
 ## Table of Contents
-* [Setup and Start](https://github.com/SHOP4CF/shakeit/edit/main/README.md#setup-and-start)
-  * [Windows](https://github.com/SHOP4CF/shakeit/edit/main/README.md#windows)
-    * [Prerequisites](https://github.com/SHOP4CF/shakeit/edit/main/README.md#prerequisites)
-      * [Installing WSL](https://github.com/SHOP4CF/shakeit/edit/main/README.md#installing-wsl)
-      * [Installing Docker Desktop WSL Backend](https://github.com/SHOP4CF/shakeit/edit/main/README.md#installing-docker-desktop-wsl-backend)
-      * [Installing Xserver](https://github.com/SHOP4CF/shakeit/edit/main/README.md#installing-xserver)
-    * [Build](https://github.com/SHOP4CF/shakeit/edit/main/README.md#build)
-    * [Run](https://github.com/SHOP4CF/shakeit/edit/main/README.md#run)
-* [Requirements/dependencies](https://github.com/SHOP4CF/shakeit/edit/main/README.md#requirementsdependencies)
-* [Packages](https://github.com/SHOP4CF/shakeit/edit/main/README.md#packages)
-* [Notes](https://github.com/SHOP4CF/shakeit/edit/main/README.md#notes)
+* [Setup and Start](https://github.com/SHOP4CF/shakeit#setup-and-start)
+  * [Windows](https://github.com/SHOP4CF/shakeit#windows)
+    * [Prerequisites](https://github.com/SHOP4CF/shakeit#prerequisites)
+      * [Installing WSL](https://github.com/SHOP4CF/shakeit#installing-wsl)
+      * [Installing Docker Desktop WSL Backend](https://github.com/SHOP4CF/shakeit#installing-docker-desktop-wsl-backend)
+      * [Installing Xserver](https://github.com/SHOP4CF/shakeit#installing-xserver)
+    * [Build](https://github.com/SHOP4CF/shakeit#build)
+    * [Run](https://github.com/SHOP4CF/shakeit#run)
+* [Requirements/dependencies](https://github.com/SHOP4CF/shakeit#requirementsdependencies)
+* [Packages](https://github.com/SHOP4CF/shakeit#packages)
+* [Notes](https://github.com/SHOP4CF/shakeit#notes)
 
 # Setup and Start
 
@@ -74,14 +74,9 @@ You can install Windows Xserver either by following this [guide](https://dev.to/
      - %userprofile%
 
 ### Build
-First clone the repository
+Clone the repository
 
-Go to folder
-```
-cd <path>/shakeit
-```
-
-Then Build the docker image using the following command:
+Build the docker image using the following command:
 
 ```powershell
 docker build -t shakeit .
